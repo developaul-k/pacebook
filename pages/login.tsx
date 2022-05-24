@@ -1,13 +1,26 @@
 import { authMiddleWare } from '../utils/middleWares'
 import useUser from '../hooks/useUser/useUser'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/router'
 
 function Login() {
+  const router = useRouter()
   const { handleSubmit } = useUser()
+
+  const passwordRef = useRef<HTMLInputElement>(null)
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [signUp, setSignUp] = useState(false)
+
+  useEffect(() => {
+    if ('email' in router.query) {
+      setEmail(router.query.email as string)
+      setPassword('')
+      setSignUp(false)
+      passwordRef.current?.focus()
+    }
+  }, [router])
 
   return (
     <article className="absolute inset-0 flex justify-center items-center bg-login">
@@ -27,7 +40,7 @@ function Login() {
           <form
             onSubmit={handleSubmit({
               type: signUp ? 'SignUp' : 'SignIn',
-              email,
+              email: email,
               password,
             })}
           >
@@ -36,15 +49,16 @@ function Login() {
                 type="email"
                 className="w-full py-3 pl-4 rounded-md bg-pacebook-disabled"
                 placeholder="Enter your email."
-                defaultValue={email}
+                value={email}
                 onChange={(e) => setEmail(e.currentTarget.value)}
                 required
               />
               <input
+                ref={passwordRef}
                 type="password"
                 className="w-full mt-3 py-3 pl-4 rounded-md bg-pacebook-disabled"
                 placeholder="Enter your password."
-                defaultValue={password}
+                value={password}
                 onChange={(e) => setPassword(e.currentTarget.value)}
                 required
               />
@@ -71,7 +85,7 @@ function Login() {
   )
 }
 
-export const getServerSideProps = authMiddleWare((_, isValid) => {
+export const getServerSideProps = authMiddleWare((ctx, isValid) => {
   if (isValid) {
     return {
       redirect: {
