@@ -3,10 +3,11 @@ import useUser from '../hooks/useUser/useUser'
 import { useState } from 'react'
 
 function Login() {
-  const { handleSubmit } = useUser();
+  const { handleSubmit } = useUser()
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [signUp, setSignUp] = useState(false)
 
   return (
     <article className="absolute inset-0 flex justify-center items-center bg-login">
@@ -23,7 +24,13 @@ function Login() {
           </div>
         </section>
         <section className="w-2/5">
-          <form onSubmit={handleSubmit({ email, password })}>
+          <form
+            onSubmit={handleSubmit({
+              type: signUp ? 'SignUp' : 'SignIn',
+              email,
+              password,
+            })}
+          >
             <div className="flex flex-col justify-center items-center p-10 rounded-md bg-white">
               <input
                 type="email"
@@ -45,14 +52,15 @@ function Login() {
                 type="submit"
                 className="mt-5 py-3 w-full rounded-md bg-pacebook2 text-white hover:opacity-90"
               >
-                Sign In
+                {signUp ? 'Sign Up' : 'Sign In'}
               </button>
               <div className="mt-5 py-2 w-full border-t-[1px] border-t-gray-300">
                 <button
                   type="button"
                   className="mt-5 py-3 w-full rounded-md bg-pacebook-green text-white hover:opacity-90"
+                  onClick={() => setSignUp((prevState) => !prevState)}
                 >
-                  Sign Up
+                  {signUp ? 'Sign In' : 'Sign Up'}
                 </button>
               </div>
             </div>
