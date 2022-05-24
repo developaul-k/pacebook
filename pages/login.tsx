@@ -26,11 +26,12 @@ function Login() {
           <form onSubmit={handleSubmit({ email, password })}>
             <div className="flex flex-col justify-center items-center p-10 rounded-md bg-white">
               <input
-                type="text"
+                type="email"
                 className="w-full py-3 pl-4 rounded-md bg-pacebook-disabled"
                 placeholder="Enter your email."
                 defaultValue={email}
                 onChange={(e) => setEmail(e.currentTarget.value)}
+                required
               />
               <input
                 type="password"
@@ -38,6 +39,7 @@ function Login() {
                 placeholder="Enter your password."
                 defaultValue={password}
                 onChange={(e) => setPassword(e.currentTarget.value)}
+                required
               />
               <button
                 type="submit"
